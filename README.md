@@ -37,13 +37,13 @@ A skeletal Scala/Gradle project. It includes Scala, ScalaTest, JUnit, [Mockito](
 
     cd new-project
     ```
-
-7. edit `build.gradle` to update versions, if you feel like it
-8. edit `settings.gradle` file to set the root project name
-9. check that everything's working:
+7. remove or edit this README file.
+8. edit `build.gradle` to update versions, if you feel like it
+9. edit `settings.gradle` file to set the root project name
+10. check that everything's working:
 
     ```
     ./gradlew check
     ```
 
-10. start coding!
+11. start coding!
