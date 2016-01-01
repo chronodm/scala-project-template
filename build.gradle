@@ -9,7 +9,7 @@ version = '1.0-SNAPSHOT'
 
 ext {
   scalaMajorVersion = '2.11'
-  scalaVersion = "${scalaMajorVersion}.6"
+  scalaVersion = "${scalaMajorVersion}.7"
 }
 
 repositories {
@@ -41,7 +41,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
+    gradleVersion = '2.8'
 }
 
 compileScala {
