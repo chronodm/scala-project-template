@@ -1,10 +1,6 @@
 # IDEA stuff #
 ##############
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/libraries
-.idea/copyright
-
+.idea
 *.iml
 *.iws
 *.ipr
@@ -12,10 +8,6 @@
 # Gradle #
 ##########
 .gradle
-
-# Binaries #
-############
-notes
 
 # Backups #
 ###########
@@ -34,8 +26,7 @@ test-reports
 
 # OS generated files #
 ######################
-.DS_Store
-.DS_Store?
+.DS_Store*
 ._*
 .Spotlight-V100
 .Trashes
