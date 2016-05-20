@@ -2,7 +2,6 @@ plugins {
     id "scala"
     id "maven"
     id "com.github.maiflai.scalatest" version "0.11"
-    id "org.scoverage" version "2.0.1"
 }
 
 group = 'com.dmoles'
@@ -10,7 +9,7 @@ version = '1.0-SNAPSHOT'
 
 ext {
   scalaMajorVersion = '2.11'
-  scalaVersion = "${scalaMajorVersion}.7"
+  scalaVersion = "${scalaMajorVersion}.8"
 }
 
 repositories {
@@ -29,7 +28,7 @@ dependencies {
   // ------------------------------------------------------------
   // Misc. libraries
 
-  compile 'log4j:log4j:1.2.17'
+  compile 'org.apache.logging.log4j:log4j-core:2.5'
 
   // ------------------------------------------------------------
   // Testing
@@ -37,24 +36,22 @@ dependencies {
   testCompile "org.scalatest:scalatest_${scalaMajorVersion}:2.2.6"
   testCompile 'junit:junit:4.12'
   testCompile 'org.mockito:mockito-all:1.10.19'
-
-  testRuntime 'org.pegdown:pegdown:1.6.0'
-
-  scoverage "org.scoverage:scalac-scoverage-plugin_${scalaMajorVersion}:1.1.0"
-  scoverage "org.scoverage:scalac-scoverage-runtime_${scalaMajorVersion}:1.1.0"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.11'
+    gradleVersion = '2.13'
 }
 
-compileScala {
-    scalaCompileOptions.fork = true
-    scalaCompileOptions.forkOptions.jvmArgs = ['-XX:MaxPermSize=512m']
-    scalaCompileOptions.additionalParameters = [
-            "-feature",
-            "-language:reflectiveCalls", // used for config structural typing
-            "-language:postfixOps",
-            "-Xexperimental" // toll-free Java 8 functional bridging
-    ]
+tasks.withType(ScalaCompile) {
+    configure(scalaCompileOptions.forkOptions) {
+        memoryMaximumSize = '1g'
+    }
+    configure {
+        scalaCompileOptions.additionalParameters = [
+                "-feature",
+                "-language:reflectiveCalls", // used for config structural typing
+                "-language:postfixOps",
+                "-Xexperimental" // toll-free Java 8 functional bridging
+        ]
+    }
 }
