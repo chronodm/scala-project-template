@@ -1,21 +1,27 @@
 plugins {
-    id "scala"
-    id "maven"
-    id "com.github.maiflai.scalatest" version "0.11"
+  id 'java'
+  id 'maven'
+  id 'scala'
 }
 
-group = 'com.dmoles'
+sourceCompatibility = 1.8
+
+group = 'org.chrononaut.ephemera'
 version = '1.0-SNAPSHOT'
 
 ext {
-  scalaMajorVersion = '2.11'
-  scalaVersion = "${scalaMajorVersion}.8"
+  javaslangVersion = '2.0.5'
+  scalaMajorVersion = '2.12'
+  scalaMinorVersion = '1'
+  scalaVersion = "${scalaMajorVersion}.${scalaMinorVersion}"
 }
 
 repositories {
-  mavenCentral()
-  mavenLocal()
+    jcenter()
 }
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.scala.srcDir "src/main/java"
 
 dependencies {
 
@@ -28,30 +34,33 @@ dependencies {
   // ------------------------------------------------------------
   // Misc. libraries
 
-  compile 'org.apache.logging.log4j:log4j-core:2.5'
+  compile 'com.google.guava:guava:21.0'
+  compile "io.javaslang:javaslang:${javaslangVersion}"
+  compile "io.javaslang:javaslang-jackson:${javaslangVersion}"
+  compile "org.typelevel:squants_${scalaMajorVersion}:1.2.0"
+  compile "org.scalactic:scalactic_${scalaMajorVersion}:3.0.1"
 
   // ------------------------------------------------------------
   // Testing
 
-  testCompile "org.scalatest:scalatest_${scalaMajorVersion}:2.2.6"
   testCompile 'junit:junit:4.12'
-  testCompile 'org.mockito:mockito-all:1.10.19'
+  testCompile 'org.assertj:assertj-core:3.6.1'
+  testCompile 'org.mockito:mockito-core:1.10.19'
+
+  testCompile "org.scalatest:scalatest_${scalaMajorVersion}:3.0.1"
+  testRuntime 'org.pegdown:pegdown:1.1.0' // TODO: is this necessary?
+
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '3.3'
+    distributionType = 'all' // Wrapper.DistributionType.ALL
 }
 
-tasks.withType(ScalaCompile) {
-    configure(scalaCompileOptions.forkOptions) {
-        memoryMaximumSize = '1g'
-    }
-    configure {
-        scalaCompileOptions.additionalParameters = [
-                "-feature",
-                "-language:reflectiveCalls", // used for config structural typing
-                "-language:postfixOps",
-                "-Xexperimental" // toll-free Java 8 functional bridging
-        ]
-    }
+task scalaTest(dependsOn: ['testClasses'], type: JavaExec) {
+  main = 'org.scalatest.tools.Runner'
+  args = ['-R', 'build/classes/test', '-o']
+  classpath = sourceSets.test.runtimeClasspath
 }
+
+test.dependsOn scalaTest
